@@ -41,3 +41,5 @@ void main() {
       expect(find.byIcon(Icons.check_circle), findsOneWidget);
       expect(find.byIcon(Icons.circle_outlined), findsNothing);
     });
+  });
+}

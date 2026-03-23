@@ -97,8 +97,55 @@ class _HabitListScreenState extends State<HabitListScreen> {
       ),
       body: _habits.isEmpty
           ? const Center(child: Text('点击 + 添加第一个习惯'))
-          : ReorderableListView.builder(
-              itemCount: _habits.length,
+          : ReorderableListView(
+              children: _habits.asMap().entries.map((entry) {
+                final index = entry.key;
+                final habit = entry.value;
+                return Card(
+                  key: ValueKey(habit.id),
+                  margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  child: Padding(
+                    padding: const EdgeInsets.all(12),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          flex: 1,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(habit.name, style: const TextStyle(fontSize: 16)),
+                              Text('连续 ${habit.getStreakDays()} 天 | 总 ${habit.checkedDates.length} 天', style: const TextStyle(fontSize: 12, color: Colors.grey)),
+                            ],
+                          ),
+                        ),
+                        Expanded(
+                          flex: 2,
+                          child: Row(
+                            children: List.generate(habit.dailyGoal, (i) {
+                              final checked = i < habit.getTodayCheckCount();
+                              return GestureDetector(
+                                onTap: () => _toggleCheck(index),
+                                child: Padding(
+                                  padding: const EdgeInsets.only(left: 4),
+                                  child: Icon(
+                                    checked ? Icons.check_circle : Icons.circle_outlined,
+                                    color: checked ? Colors.green : Colors.grey,
+                                    size: 20,
+                                  ),
+                                ),
+                              );
+                            }),
+                          ),
+                        ),
+                        ReorderableDragStartListener(
+                          index: index,
+                          child: const Icon(Icons.drag_handle, color: Colors.grey),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              }).toList(),
               onReorder: (oldIndex, newIndex) async {
                 setState(() {
                   if (newIndex > oldIndex) newIndex--;
@@ -106,74 +153,6 @@ class _HabitListScreenState extends State<HabitListScreen> {
                   _habits.insert(newIndex, habit);
                 });
                 await _saveHabits();
-              },
-              itemBuilder: (context, index) {
-                final habit = _habits[index];
-                return Card(
-                  key: ValueKey(habit.id),
-                  margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                  child: ListTile(
-                    title: Text(habit.name),
-                    subtitle: Text('连续 ${habit.getStreakDays()} 天'),
-                    trailing: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: List.generate(habit.dailyGoal, (i) {
-                        final checked = i < habit.getTodayCheckCount();
-                        return Padding(
-                          padding: const EdgeInsets.only(left: 4),
-                          child: Icon(
-                            checked ? Icons.check_circle : Icons.circle_outlined,
-                            color: checked ? Colors.green : Colors.grey,
-                            size: 20,
-                          ),
-                        );
-                      })..add(
-                        IconButton(
-                          icon: const Icon(Icons.add_circle_outline),
-                          onPressed: () => _toggleCheck(index),
-                          iconSize: 24,
-                        ),
-                      ),
-                    ),
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => HabitDetailScreen(
-                            habit: habit,
-                            onDelete: () async {
-                              setState(() => _habits.removeAt(index));
-                              await _saveHabits();
-                            },
-                          ),
-                        ),
-                      );
-                    },
-                    onLongPress: () {
-                      showDialog(
-                        context: context,
-                        builder: (context) => AlertDialog(
-                          title: const Text('删除习惯'),
-                          content: Text('确定要删除"${habit.name}"吗？'),
-                          actions: [
-                            TextButton(
-                              onPressed: () => Navigator.pop(context),
-                              child: const Text('取消'),
-                            ),
-                            TextButton(
-                              onPressed: () async {
-                                Navigator.pop(context);
-                                setState(() => _habits.removeAt(index));
-                                await _saveHabits();
-                              },
-                              child: const Text('删除'),
-                            ),
-                          ],
-                        ),
-                      );
-                    },
-                  ),
-                );
               },
             ),
       floatingActionButton: FloatingActionButton(

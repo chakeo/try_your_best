@@ -15,7 +15,7 @@ void main() {
       await tester.tap(find.text('确认'));
       await tester.pumpAndSettle();
 
-      await tester.tap(find.byIcon(Icons.add_circle_outline));
+      await tester.tap(find.byIcon(Icons.circle_outlined));
       await tester.pumpAndSettle();
 
       expect(find.byIcon(Icons.check_circle), findsOneWidget);
@@ -37,9 +37,9 @@ void main() {
       await tester.tap(find.text('确认'));
       await tester.pumpAndSettle();
 
-      await tester.tap(find.byIcon(Icons.add_circle_outline));
+      await tester.tap(find.byIcon(Icons.circle_outlined).first);
       await tester.pumpAndSettle();
-      await tester.tap(find.byIcon(Icons.add_circle_outline));
+      await tester.tap(find.byIcon(Icons.circle_outlined).first);
       await tester.pumpAndSettle();
 
       expect(find.byIcon(Icons.check_circle), findsNWidgets(2));
@@ -61,9 +61,9 @@ void main() {
       await tester.tap(find.text('确认'));
       await tester.pumpAndSettle();
 
-      await tester.tap(find.byIcon(Icons.add_circle_outline));
+      await tester.tap(find.byIcon(Icons.circle_outlined).first);
       await tester.pumpAndSettle();
-      await tester.tap(find.byIcon(Icons.add_circle_outline));
+      await tester.tap(find.byIcon(Icons.circle_outlined).first);
       await tester.pumpAndSettle();
 
       expect(find.byIcon(Icons.check_circle), findsNWidgets(2));
