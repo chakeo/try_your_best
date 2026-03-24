@@ -108,22 +108,50 @@ class _HabitDetailScreenState extends State<HabitDetailScreen> {
           const Divider(),
           Padding(
             padding: const EdgeInsets.all(16.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                Column(
-                  children: [
-                    Text('${widget.habit.checkedDates.length}', style: const TextStyle(fontSize: 28, fontWeight: FontWeight.bold)),
-                    const Text('总打卡数'),
-                  ],
-                ),
-                Column(
-                  children: [
-                    Text('${_getMaxStreak()}', style: const TextStyle(fontSize: 28, fontWeight: FontWeight.bold)),
-                    const Text('最长连续'),
-                  ],
-                ),
-              ],
+            child: Container(
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(12),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.05),
+                    blurRadius: 8,
+                    offset: const Offset(0, 2),
+                  ),
+                ],
+              ),
+              padding: const EdgeInsets.all(20),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  Column(
+                    children: [
+                      Text(
+                        '${widget.habit.checkedDates.length}',
+                        style: const TextStyle(
+                          fontSize: 32,
+                          fontWeight: FontWeight.bold,
+                          color: Color(0xFF5B8DEE),
+                        ),
+                      ),
+                      const Text('总打卡数'),
+                    ],
+                  ),
+                  Column(
+                    children: [
+                      Text(
+                        '${_getMaxStreak()}',
+                        style: const TextStyle(
+                          fontSize: 32,
+                          fontWeight: FontWeight.bold,
+                          color: Color(0xFF4CAF50),
+                        ),
+                      ),
+                      const Text('最长连续'),
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
         ],
@@ -171,19 +199,22 @@ class _HabitDetailScreenState extends State<HabitDetailScreen> {
                       children: [
                         if (isChecked)
                           Container(
-                            width: 32,
-                            height: 32,
+                            width: 36,
+                            height: 36,
                             decoration: const BoxDecoration(
-                              color: Colors.green,
+                              color: Color(0xFF4CAF50),
                               shape: BoxShape.circle,
                             ),
                           ),
                         if (isToday)
                           Container(
-                            width: 32,
-                            height: 32,
+                            width: 36,
+                            height: 36,
                             decoration: BoxDecoration(
-                              border: Border.all(color: Colors.orange, width: 2),
+                              border: Border.all(
+                                color: const Color(0xFFFF9800),
+                                width: 2,
+                              ),
                               shape: BoxShape.circle,
                             ),
                           ),
@@ -192,7 +223,7 @@ class _HabitDetailScreenState extends State<HabitDetailScreen> {
                           style: TextStyle(
                             color: isChecked ? Colors.white : Colors.black,
                             fontWeight: isToday ? FontWeight.bold : FontWeight.normal,
-                            fontSize: isChecked ? 10 : 14,
+                            fontSize: isChecked ? 11 : 14,
                           ),
                         ),
                       ],
