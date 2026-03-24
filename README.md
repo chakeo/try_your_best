@@ -1,16 +1,143 @@
-# try_your_best
+# 习惯打卡 (Try Your Best)
 
-A new Flutter project.
+一个简洁优雅的 Flutter 习惯追踪应用，帮助你养成好习惯，记录每日打卡进度。
 
-## Getting Started
+## ✨ 功能特性
 
-This project is a starting point for a Flutter application.
+- 📝 创建自定义习惯，设置每日目标次数和目标天数
+- ✅ 每日多次打卡支持（可设置 1-10 次/天）
+- 🔥 连续打卡天数统计（Streak）
+- 📊 打卡历史日历视图
+- 📈 打卡统计数据展示
+- 🎨 优雅的 UI 设计和流畅动画
+- 💾 本地数据持久化存储
+- 🔄 习惯列表拖拽排序
 
-A few resources to get you started if this is your first Flutter project:
+## 📱 截图
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+（待添加应用截图）
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## 🚀 快速开始
+
+### 环境要求
+
+- Flutter SDK: ^3.10.7
+- Dart SDK: ^3.10.7
+
+### 安装步骤
+
+1. 克隆项目
+```bash
+git clone <repository-url>
+cd try_your_best
+```
+
+2. 安装依赖
+```bash
+flutter pub get
+```
+
+3. 运行应用
+```bash
+flutter run
+```
+
+## 🛠️ 技术栈
+
+- **Flutter** - 跨平台 UI 框架
+- **SharedPreferences** - 本地数据持久化
+- **Intl** - 国际化和日期格式化
+- **Lunar** - 农历日期支持
+
+## 📦 项目结构
+
+```
+lib/
+├── models/
+│   └── habit.dart              # 习惯数据模型
+├── services/
+│   └── storage_service.dart    # 数据存储服务
+├── screens/
+│   └── habit_detail_screen.dart # 习惯详情页
+├── widgets/
+│   ├── add_habit_dialog.dart   # 添加习惯对话框
+│   └── header_widget.dart      # 头部组件
+└── main.dart                   # 应用入口
+
+test/
+├── models/
+│   ├── habit_test.dart         # 模型单元测试
+│   └── habit_target_days_test.dart
+├── services/
+│   └── storage_service_test.dart # 服务单元测试
+└── widgets/
+    ├── add_habit_dialog_test.dart # 组件测试
+    └── header_widget_test.dart
+```
+
+## 🧪 测试
+
+运行所有测试：
+```bash
+flutter test
+```
+
+运行特定测试文件：
+```bash
+flutter test test/models/habit_test.dart
+```
+
+## 📝 开发命令
+
+```bash
+# 获取依赖
+flutter pub get
+
+# 运行应用（调试模式）
+flutter run
+
+# 运行应用（指定设备）
+flutter run -d <device-id>
+
+# 构建发布版本
+flutter build apk          # Android
+flutter build ios          # iOS
+flutter build macos        # macOS
+
+# 代码分析
+flutter analyze
+
+# 运行测试
+flutter test
+```
+
+## 🎯 核心功能说明
+
+### 习惯模型
+- 支持自定义每日目标次数（1-10次）
+- 可设置目标天数（7/14/21/30/60/90/100天）
+- 自动计算连续打卡天数
+- 记录每日打卡次数
+
+### 数据持久化
+- 使用 SharedPreferences 本地存储
+- JSON 序列化/反序列化
+- 自动保存习惯列表和打卡记录
+
+### UI 特性
+- Material Design 3 设计风格
+- 流畅的动画效果
+- 响应式布局
+- 拖拽排序支持
+
+## 📄 许可证
+
+本项目仅供学习和个人使用。
+
+## 🤝 贡献
+
+欢迎提交 Issue 和 Pull Request！
+
+---
+
+Made with ❤️ using Flutter
