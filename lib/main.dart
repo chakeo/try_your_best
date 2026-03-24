@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'models/habit.dart';
 import 'services/storage_service.dart';
 import 'widgets/add_habit_dialog.dart';
-import 'screens/habit_detail_screen.dart';
+import 'widgets/header_widget.dart';
 
 void main() {
   runApp(const MyApp());
@@ -16,7 +16,11 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: '习惯打卡',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: const Color(0xFF5B8DEE),
+          brightness: Brightness.light,
+        ),
+        scaffoldBackgroundColor: const Color(0xFFF5F5F5),
         useMaterial3: true,
       ),
       home: const HabitListScreen(),
@@ -62,6 +66,7 @@ class _HabitListScreenState extends State<HabitListScreen> {
           name: result['name'],
           checkedDates: [],
           dailyGoal: result['dailyGoal'],
+          targetDays: result['targetDays'],
         ));
       });
       await _saveHabits();
@@ -91,21 +96,26 @@ class _HabitListScreenState extends State<HabitListScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('习惯打卡'),
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-      ),
-      body: _habits.isEmpty
-          ? const Center(child: Text('点击 + 添加第一个习惯'))
-          : ReorderableListView(
+      body: Column(
+        children: [
+          const HeaderWidget(),
+          Expanded(
+            child: _habits.isEmpty
+                ? const Center(child: Text('点击 + 添加第一个习惯'))
+                : ReorderableListView(
               children: _habits.asMap().entries.map((entry) {
                 final index = entry.key;
                 final habit = entry.value;
                 return Card(
                   key: ValueKey(habit.id),
-                  margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  elevation: 2,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  color: Colors.white,
+                  margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                   child: Padding(
-                    padding: const EdgeInsets.all(12),
+                    padding: const EdgeInsets.all(16),
                     child: Row(
                       children: [
                         Expanded(
@@ -113,28 +123,47 @@ class _HabitListScreenState extends State<HabitListScreen> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(habit.name, style: const TextStyle(fontSize: 16)),
-                              Text('连续 ${habit.getStreakDays()} 天 | 总 ${habit.checkedDates.length} 天', style: const TextStyle(fontSize: 12, color: Colors.grey)),
+                              Text(
+                                habit.name,
+                                style: const TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                              Text(
+                                '连续 ${habit.getStreakDays()} 天 | 目标 ${habit.targetDays} 天',
+                                style: TextStyle(
+                                  fontSize: 13,
+                                  color: Colors.grey[600],
+                                ),
+                              ),
                             ],
                           ),
                         ),
                         Expanded(
                           flex: 2,
-                          child: Row(
-                            children: List.generate(habit.dailyGoal, (i) {
-                              final checked = i < habit.getTodayCheckCount();
-                              return GestureDetector(
-                                onTap: () => _toggleCheck(index),
-                                child: Padding(
-                                  padding: const EdgeInsets.only(left: 4),
-                                  child: Icon(
-                                    checked ? Icons.check_circle : Icons.circle_outlined,
-                                    color: checked ? Colors.green : Colors.grey,
-                                    size: 20,
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: const Color(0xFFE8F5E9),
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                            child: Row(
+                              children: List.generate(habit.dailyGoal, (i) {
+                                final checked = i < habit.getTodayCheckCount();
+                                return GestureDetector(
+                                  onTap: () => _toggleCheck(index),
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(left: 4),
+                                    child: Icon(
+                                      checked ? Icons.check_circle : Icons.circle_outlined,
+                                      color: checked ? const Color(0xFF4CAF50) : Colors.grey,
+                                      size: 20,
+                                    ),
                                   ),
-                                ),
-                              );
-                            }),
+                                );
+                              }),
+                            ),
                           ),
                         ),
                         ReorderableDragStartListener(
@@ -155,6 +184,9 @@ class _HabitListScreenState extends State<HabitListScreen> {
                 await _saveHabits();
               },
             ),
+          ),
+        ],
+      ),
       floatingActionButton: FloatingActionButton(
         onPressed: _addHabit,
         child: const Icon(Icons.add),
