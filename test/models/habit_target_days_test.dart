@@ -3,11 +3,7 @@ import 'package:try_your_best/models/habit.dart';
 
 void main() {
   test('Habit has targetDays field with default value 21', () {
-    final habit = Habit(
-      id: '1',
-      name: 'Test',
-      checkedDates: [],
-    );
+    final habit = Habit(id: '1', name: 'Test', checkedDates: []);
 
     expect(habit.targetDays, 21);
   });
@@ -48,11 +44,7 @@ void main() {
   });
 
   test('Habit uses default targetDays when not in JSON', () {
-    final json = {
-      'id': '1',
-      'name': 'Test',
-      'checkedDates': [],
-    };
+    final json = {'id': '1', 'name': 'Test', 'checkedDates': []};
 
     final habit = Habit.fromJson(json);
     expect(habit.targetDays, 21);

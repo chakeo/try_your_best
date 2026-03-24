@@ -26,7 +26,9 @@ class _HabitDetailScreenState extends State<HabitDetailScreen> {
 
   int _getMaxStreak() {
     if (widget.habit.checkedDates.isEmpty) return 0;
-    final dates = widget.habit.checkedDates.map((d) => DateTime.parse(d)).toList()..sort();
+    final dates =
+        widget.habit.checkedDates.map((d) => DateTime.parse(d)).toList()
+          ..sort();
     int maxStreak = 1, currentStreak = 1;
     for (int i = 1; i < dates.length; i++) {
       if (dates[i].difference(dates[i - 1]).inDays == 1) {
@@ -41,7 +43,6 @@ class _HabitDetailScreenState extends State<HabitDetailScreen> {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.habit.name),
@@ -85,19 +86,28 @@ class _HabitDetailScreenState extends State<HabitDetailScreen> {
                   icon: const Icon(Icons.chevron_left),
                   onPressed: () {
                     setState(() {
-                      _currentMonth = DateTime(_currentMonth.year, _currentMonth.month - 1);
+                      _currentMonth = DateTime(
+                        _currentMonth.year,
+                        _currentMonth.month - 1,
+                      );
                     });
                   },
                 ),
                 Text(
                   '${_currentMonth.year}年${_currentMonth.month}月',
-                  style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  style: const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
                 IconButton(
                   icon: const Icon(Icons.chevron_right),
                   onPressed: () {
                     setState(() {
-                      _currentMonth = DateTime(_currentMonth.year, _currentMonth.month + 1);
+                      _currentMonth = DateTime(
+                        _currentMonth.year,
+                        _currentMonth.month + 1,
+                      );
                     });
                   },
                 ),
@@ -172,7 +182,17 @@ class _HabitDetailScreenState extends State<HabitDetailScreen> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: ['日', '一', '二', '三', '四', '五', '六']
-                .map((day) => SizedBox(width: 40, child: Center(child: Text(day, style: const TextStyle(fontWeight: FontWeight.bold)))))
+                .map(
+                  (day) => SizedBox(
+                    width: 40,
+                    child: Center(
+                      child: Text(
+                        day,
+                        style: const TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                  ),
+                )
                 .toList(),
           ),
           const SizedBox(height: 8),
@@ -184,11 +204,19 @@ class _HabitDetailScreenState extends State<HabitDetailScreen> {
                 if (dayNum < 1 || dayNum > lastDay.day) {
                   return const SizedBox(width: 40, height: 40);
                 }
-                final date = DateTime(_currentMonth.year, _currentMonth.month, dayNum);
-                final dateStr = '${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}';
+                final date = DateTime(
+                  _currentMonth.year,
+                  _currentMonth.month,
+                  dayNum,
+                );
+                final dateStr =
+                    '${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}';
                 final checkCount = widget.habit.checkCounts[dateStr] ?? 0;
                 final isChecked = checkCount > 0;
-                final isToday = date.year == today.year && date.month == today.month && date.day == today.day;
+                final isToday =
+                    date.year == today.year &&
+                    date.month == today.month &&
+                    date.day == today.day;
 
                 return SizedBox(
                   width: 40,
@@ -219,10 +247,14 @@ class _HabitDetailScreenState extends State<HabitDetailScreen> {
                             ),
                           ),
                         Text(
-                          isChecked ? '$checkCount/${widget.habit.dailyGoal}' : '$dayNum',
+                          isChecked
+                              ? '$checkCount/${widget.habit.dailyGoal}'
+                              : '$dayNum',
                           style: TextStyle(
                             color: isChecked ? Colors.white : Colors.black,
-                            fontWeight: isToday ? FontWeight.bold : FontWeight.normal,
+                            fontWeight: isToday
+                                ? FontWeight.bold
+                                : FontWeight.normal,
                             fontSize: isChecked ? 11 : 14,
                           ),
                         ),

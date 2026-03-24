@@ -68,7 +68,11 @@ class _AddHabitDialogState extends State<AddHabitDialog> {
         TextButton(
           onPressed: () {
             if (_controller.text.trim().isNotEmpty) {
-              Navigator.pop(context, {'name': _controller.text.trim(), 'dailyGoal': _dailyGoal, 'targetDays': _targetDays});
+              Navigator.pop(context, {
+                'name': _controller.text.trim(),
+                'dailyGoal': _dailyGoal,
+                'targetDays': _targetDays,
+              });
             }
           },
           child: const Text('确认'),

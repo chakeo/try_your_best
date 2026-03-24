@@ -16,10 +16,9 @@ void main() {
 
     // Find Container with light green background
     final container = tester.widget<Container>(
-      find.descendant(
-        of: find.byType(Card),
-        matching: find.byType(Container),
-      ).first,
+      find
+          .descendant(of: find.byType(Card), matching: find.byType(Container))
+          .first,
     );
 
     final decoration = container.decoration as BoxDecoration?;

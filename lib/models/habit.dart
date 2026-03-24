@@ -22,7 +22,9 @@ class Habit {
       checkedDates: List<String>.from(json['checkedDates']),
       dailyGoal: json['dailyGoal'] ?? 1,
       targetDays: json['targetDays'] ?? 21,
-      checkCounts: json['checkCounts'] != null ? Map<String, int>.from(json['checkCounts']) : {},
+      checkCounts: json['checkCounts'] != null
+          ? Map<String, int>.from(json['checkCounts'])
+          : {},
     );
   }
 
@@ -64,7 +66,8 @@ class Habit {
 
   int getTodayCheckCount() {
     final today = DateTime.now();
-    final todayStr = '${today.year}-${today.month.toString().padLeft(2, '0')}-${today.day.toString().padLeft(2, '0')}';
+    final todayStr =
+        '${today.year}-${today.month.toString().padLeft(2, '0')}-${today.day.toString().padLeft(2, '0')}';
     return checkCounts[todayStr] ?? 0;
   }
 

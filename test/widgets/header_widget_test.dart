@@ -5,11 +5,7 @@ import 'package:try_your_best/widgets/header_widget.dart';
 void main() {
   testWidgets('HeaderWidget displays date and encouragement', (tester) async {
     await tester.pumpWidget(
-      const MaterialApp(
-        home: Scaffold(
-          body: HeaderWidget(),
-        ),
-      ),
+      const MaterialApp(home: Scaffold(body: HeaderWidget())),
     );
 
     // Should display "新的一天" text
@@ -26,11 +22,7 @@ void main() {
 
   testWidgets('HeaderWidget displays lunar date', (tester) async {
     await tester.pumpWidget(
-      const MaterialApp(
-        home: Scaffold(
-          body: HeaderWidget(),
-        ),
-      ),
+      const MaterialApp(home: Scaffold(body: HeaderWidget())),
     );
 
     // Should display lunar date text (农历)

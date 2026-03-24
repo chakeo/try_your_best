@@ -61,13 +61,15 @@ class _HabitListScreenState extends State<HabitListScreen> {
     );
     if (result != null) {
       setState(() {
-        _habits.add(Habit(
-          id: DateTime.now().millisecondsSinceEpoch.toString(),
-          name: result['name'],
-          checkedDates: [],
-          dailyGoal: result['dailyGoal'],
-          targetDays: result['targetDays'],
-        ));
+        _habits.add(
+          Habit(
+            id: DateTime.now().millisecondsSinceEpoch.toString(),
+            name: result['name'],
+            checkedDates: [],
+            dailyGoal: result['dailyGoal'],
+            targetDays: result['targetDays'],
+          ),
+        );
       });
       await _saveHabits();
     }
@@ -76,7 +78,8 @@ class _HabitListScreenState extends State<HabitListScreen> {
   Future<void> _toggleCheck(int index) async {
     final habit = _habits[index];
     final today = DateTime.now();
-    final todayStr = '${today.year}-${today.month.toString().padLeft(2, '0')}-${today.day.toString().padLeft(2, '0')}';
+    final todayStr =
+        '${today.year}-${today.month.toString().padLeft(2, '0')}-${today.day.toString().padLeft(2, '0')}';
 
     setState(() {
       final currentCount = habit.checkCounts[todayStr] ?? 0;
@@ -103,87 +106,105 @@ class _HabitListScreenState extends State<HabitListScreen> {
             child: _habits.isEmpty
                 ? const Center(child: Text('点击 + 添加第一个习惯'))
                 : ReorderableListView(
-              children: _habits.asMap().entries.map((entry) {
-                final index = entry.key;
-                final habit = entry.value;
-                return Card(
-                  key: ValueKey(habit.id),
-                  elevation: 2,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  color: Colors.white,
-                  margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                  child: Padding(
-                    padding: const EdgeInsets.all(16),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          flex: 1,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
+                    children: _habits.asMap().entries.map((entry) {
+                      final index = entry.key;
+                      final habit = entry.value;
+                      return Card(
+                        key: ValueKey(habit.id),
+                        elevation: 2,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        color: Colors.white,
+                        margin: const EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 8,
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(16),
+                          child: Row(
                             children: [
-                              Text(
-                                habit.name,
-                                style: const TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.w500,
+                              Expanded(
+                                flex: 1,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      habit.name,
+                                      style: const TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
+                                    Text(
+                                      '连续 ${habit.getStreakDays()} 天 | 目标 ${habit.targetDays} 天',
+                                      style: TextStyle(
+                                        fontSize: 13,
+                                        color: Colors.grey[600],
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
-                              Text(
-                                '连续 ${habit.getStreakDays()} 天 | 目标 ${habit.targetDays} 天',
-                                style: TextStyle(
-                                  fontSize: 13,
-                                  color: Colors.grey[600],
+                              Expanded(
+                                flex: 2,
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    color: const Color(0xFFE8F5E9),
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 12,
+                                    vertical: 8,
+                                  ),
+                                  child: Row(
+                                    children: List.generate(habit.dailyGoal, (
+                                      i,
+                                    ) {
+                                      final checked =
+                                          i < habit.getTodayCheckCount();
+                                      return GestureDetector(
+                                        onTap: () => _toggleCheck(index),
+                                        child: Padding(
+                                          padding: const EdgeInsets.only(
+                                            left: 4,
+                                          ),
+                                          child: Icon(
+                                            checked
+                                                ? Icons.check_circle
+                                                : Icons.circle_outlined,
+                                            color: checked
+                                                ? const Color(0xFF4CAF50)
+                                                : Colors.grey,
+                                            size: 20,
+                                          ),
+                                        ),
+                                      );
+                                    }),
+                                  ),
+                                ),
+                              ),
+                              ReorderableDragStartListener(
+                                index: index,
+                                child: const Icon(
+                                  Icons.drag_handle,
+                                  color: Colors.grey,
                                 ),
                               ),
                             ],
                           ),
                         ),
-                        Expanded(
-                          flex: 2,
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color: const Color(0xFFE8F5E9),
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                            child: Row(
-                              children: List.generate(habit.dailyGoal, (i) {
-                                final checked = i < habit.getTodayCheckCount();
-                                return GestureDetector(
-                                  onTap: () => _toggleCheck(index),
-                                  child: Padding(
-                                    padding: const EdgeInsets.only(left: 4),
-                                    child: Icon(
-                                      checked ? Icons.check_circle : Icons.circle_outlined,
-                                      color: checked ? const Color(0xFF4CAF50) : Colors.grey,
-                                      size: 20,
-                                    ),
-                                  ),
-                                );
-                              }),
-                            ),
-                          ),
-                        ),
-                        ReorderableDragStartListener(
-                          index: index,
-                          child: const Icon(Icons.drag_handle, color: Colors.grey),
-                        ),
-                      ],
-                    ),
+                      );
+                    }).toList(),
+                    onReorder: (oldIndex, newIndex) async {
+                      setState(() {
+                        if (newIndex > oldIndex) newIndex--;
+                        final habit = _habits.removeAt(oldIndex);
+                        _habits.insert(newIndex, habit);
+                      });
+                      await _saveHabits();
+                    },
                   ),
-                );
-              }).toList(),
-              onReorder: (oldIndex, newIndex) async {
-                setState(() {
-                  if (newIndex > oldIndex) newIndex--;
-                  final habit = _habits.removeAt(oldIndex);
-                  _habits.insert(newIndex, habit);
-                });
-                await _saveHabits();
-              },
-            ),
           ),
         ],
       ),
