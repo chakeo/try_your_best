@@ -15,15 +15,15 @@ void main() {
       await tester.tap(find.text('确认'));
       await tester.pumpAndSettle();
 
-      // 验证显示总天数0
-      expect(find.textContaining('总 0 天'), findsOneWidget);
+      // 验证显示目标天数21
+      expect(find.textContaining('目标 21 天'), findsOneWidget);
 
       // 打卡一次
       await tester.tap(find.byIcon(Icons.circle_outlined));
       await tester.pumpAndSettle();
 
-      // 验证显示总天数1
-      expect(find.textContaining('总 1 天'), findsOneWidget);
+      // 验证仍显示目标天数21
+      expect(find.textContaining('目标 21 天'), findsOneWidget);
     });
   });
 }

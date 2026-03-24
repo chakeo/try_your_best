@@ -30,7 +30,7 @@ void main() {
       await tester.pumpAndSettle();
 
       await tester.enterText(find.byType(TextField), '测试习惯');
-      await tester.tap(find.byType(DropdownButton<int>));
+      await tester.tap(find.byType(DropdownButton<int>).first);
       await tester.pumpAndSettle();
       await tester.tap(find.text('3 次').last);
       await tester.pumpAndSettle();
@@ -54,7 +54,7 @@ void main() {
       await tester.pumpAndSettle();
 
       await tester.enterText(find.byType(TextField), '测试习惯');
-      await tester.tap(find.byType(DropdownButton<int>));
+      await tester.tap(find.byType(DropdownButton<int>).first);
       await tester.pumpAndSettle();
       await tester.tap(find.text('2 次').last);
       await tester.pumpAndSettle();

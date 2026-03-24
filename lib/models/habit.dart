@@ -3,6 +3,7 @@ class Habit {
   final String name;
   final List<String> checkedDates;
   final int dailyGoal;
+  final int targetDays;
   final Map<String, int> checkCounts;
 
   Habit({
@@ -10,6 +11,7 @@ class Habit {
     required this.name,
     required this.checkedDates,
     this.dailyGoal = 1,
+    this.targetDays = 21,
     Map<String, int>? checkCounts,
   }) : checkCounts = checkCounts ?? {};
 
@@ -19,6 +21,7 @@ class Habit {
       name: json['name'],
       checkedDates: List<String>.from(json['checkedDates']),
       dailyGoal: json['dailyGoal'] ?? 1,
+      targetDays: json['targetDays'] ?? 21,
       checkCounts: json['checkCounts'] != null ? Map<String, int>.from(json['checkCounts']) : {},
     );
   }
@@ -29,6 +32,7 @@ class Habit {
       'name': name,
       'checkedDates': checkedDates,
       'dailyGoal': dailyGoal,
+      'targetDays': targetDays,
       'checkCounts': checkCounts,
     };
   }
