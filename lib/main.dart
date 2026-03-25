@@ -3,6 +3,7 @@ import 'models/habit.dart';
 import 'services/storage_service.dart';
 import 'widgets/add_habit_dialog.dart';
 import 'widgets/header_widget.dart';
+import 'screens/task_list_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -23,7 +24,45 @@ class MyApp extends StatelessWidget {
         scaffoldBackgroundColor: const Color(0xFFF5F5F5),
         useMaterial3: true,
       ),
-      home: const HabitListScreen(),
+      home: const MainScreen(),
+    );
+  }
+}
+
+class MainScreen extends StatefulWidget {
+  const MainScreen({super.key});
+
+  @override
+  State<MainScreen> createState() => _MainScreenState();
+}
+
+class _MainScreenState extends State<MainScreen> {
+  int _currentIndex = 0;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: IndexedStack(
+        index: _currentIndex,
+        children: const [
+          HabitListScreen(),
+          TaskListScreen(),
+        ],
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: _currentIndex,
+        onTap: (index) => setState(() => _currentIndex = index),
+        items: const [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.check_circle),
+            label: '习惯',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.timer),
+            label: '任务',
+          ),
+        ],
+      ),
     );
   }
 }
