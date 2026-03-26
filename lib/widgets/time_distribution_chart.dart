@@ -86,7 +86,7 @@ class TimeDistributionChart extends StatelessWidget {
     return data.asMap().entries.map((entry) {
       final index = entry.key;
       final item = entry.value;
-      final hours = (item.value / 60).toStringAsFixed(1);
+      final minutes = item.value;
 
       return Padding(
         padding: const EdgeInsets.only(bottom: 8),
@@ -99,7 +99,7 @@ class TimeDistributionChart extends StatelessWidget {
             ),
             const SizedBox(width: 8),
             Expanded(child: Text(item.key)),
-            Text('$hours 小时', style: TextStyle(color: Colors.grey[600])),
+            Text('$minutes 分钟', style: TextStyle(color: Colors.grey[600])),
           ],
         ),
       );

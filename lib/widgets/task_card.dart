@@ -17,8 +17,8 @@ class TaskCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final progress = task.getProgress();
-    final totalHours = (task.getTotalMinutes() / 60).toStringAsFixed(1);
-    final targetHours = (task.targetMinutes / 60).toStringAsFixed(1);
+    final totalMinutes = task.getTotalMinutes();
+    final targetMinutes = task.targetMinutes;
 
     return Card(
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -53,7 +53,7 @@ class TaskCard extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    '$totalHours / $targetHours 小时',
+                    '$totalMinutes / $targetMinutes 分钟',
                     style: TextStyle(color: Colors.grey[600]),
                   ),
                   Text(

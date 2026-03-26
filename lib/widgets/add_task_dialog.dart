@@ -9,7 +9,7 @@ class AddTaskDialog extends StatefulWidget {
 
 class _AddTaskDialogState extends State<AddTaskDialog> {
   final _controller = TextEditingController();
-  int _targetHours = 5;
+  int _targetMinutes = 120;
   DateTime _deadline = DateTime.now().add(const Duration(days: 7));
 
   @override
@@ -36,11 +36,11 @@ class _AddTaskDialogState extends State<AddTaskDialog> {
               const Text('目标时长：'),
               const SizedBox(width: 8),
               DropdownButton<int>(
-                value: _targetHours,
-                items: List.generate(20, (i) => i + 1)
-                    .map((n) => DropdownMenuItem(value: n, child: Text('$n 小时')))
+                value: _targetMinutes,
+                items: [30, 60, 90, 120, 150, 180, 240, 300, 360, 480, 600]
+                    .map((n) => DropdownMenuItem(value: n, child: Text('$n 分钟')))
                     .toList(),
-                onChanged: (value) => setState(() => _targetHours = value!),
+                onChanged: (value) => setState(() => _targetMinutes = value!),
               ),
             ],
           ),
@@ -75,7 +75,7 @@ class _AddTaskDialogState extends State<AddTaskDialog> {
             if (_controller.text.trim().isNotEmpty) {
               Navigator.pop(context, {
                 'name': _controller.text.trim(),
-                'targetHours': _targetHours,
+                'targetMinutes': _targetMinutes,
                 'deadline': _deadline,
               });
             }

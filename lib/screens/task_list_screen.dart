@@ -38,7 +38,7 @@ class _TaskListScreenState extends State<TaskListScreen> {
       final task = Task(
         id: DateTime.now().millisecondsSinceEpoch.toString(),
         name: result['name'],
-        targetMinutes: result['targetHours'] * 60,
+        targetMinutes: result['targetMinutes'],
         deadline: result['deadline'],
       );
 

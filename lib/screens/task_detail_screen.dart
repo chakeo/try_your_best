@@ -68,9 +68,9 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
   @override
   Widget build(BuildContext context) {
     final progress = _task.getProgress();
-    final totalHours = (_task.getTotalMinutes() / 60).toStringAsFixed(1);
-    final targetHours = (_task.targetMinutes / 60).toStringAsFixed(1);
-    final remainingMinutes = _task.targetMinutes - _task.getTotalMinutes();
+    final totalMinutes = _task.getTotalMinutes();
+    final targetMinutes = _task.targetMinutes;
+    final remainingMinutes = targetMinutes - totalMinutes;
 
     return Scaffold(
       appBar: AppBar(
@@ -107,12 +107,12 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
                     ),
                     const SizedBox(height: 8),
                     Text(
-                      '$totalHours / $targetHours 小时 (${(progress * 100).toStringAsFixed(0)}%)',
+                      '$totalMinutes / $targetMinutes 分钟 (${(progress * 100).toStringAsFixed(0)}%)',
                       style: const TextStyle(fontSize: 16),
                     ),
                     const SizedBox(height: 8),
                     Text(
-                      '剩余: ${(remainingMinutes / 60).toStringAsFixed(1)} 小时',
+                      '剩余: $remainingMinutes 分钟',
                       style: TextStyle(color: Colors.grey[600]),
                     ),
                   ],

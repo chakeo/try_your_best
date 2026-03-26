@@ -4,51 +4,51 @@ import 'package:try_your_best/models/time_session.dart';
 
 void main() {
   group('Task', () {
-    test('should create task with required fields', () {
+    test('should create task with required fields in minutes', () {
       final task = Task(
         id: '1',
         name: '学习Flutter',
-        targetMinutes: 600,
+        targetMinutes: 120,
         deadline: DateTime(2026, 3, 31),
       );
 
       expect(task.id, '1');
       expect(task.name, '学习Flutter');
-      expect(task.targetMinutes, 600);
+      expect(task.targetMinutes, 120);
       expect(task.status, TaskStatus.active);
     });
 
-    test('should calculate progress correctly', () {
+    test('should calculate progress correctly with minutes', () {
       final task = Task(
         id: '1',
         name: '学习Flutter',
-        targetMinutes: 600,
+        targetMinutes: 120,
         deadline: DateTime(2026, 3, 31),
         sessions: [
           TimeSession(
             id: '1',
             startTime: DateTime(2026, 3, 24, 9, 0),
-            endTime: DateTime(2026, 3, 24, 11, 0),
-            durationMinutes: 120,
+            endTime: DateTime(2026, 3, 24, 10, 0),
+            durationMinutes: 60,
           ),
         ],
       );
 
-      expect(task.getProgress(), 0.2);
+      expect(task.getProgress(), 0.5);
     });
 
     test('should calculate total minutes correctly', () {
       final task = Task(
         id: '1',
         name: '学习Flutter',
-        targetMinutes: 600,
+        targetMinutes: 180,
         deadline: DateTime(2026, 3, 31),
         sessions: [
           TimeSession(
             id: '1',
             startTime: DateTime(2026, 3, 24, 9, 0),
-            endTime: DateTime(2026, 3, 24, 11, 0),
-            durationMinutes: 120,
+            endTime: DateTime(2026, 3, 24, 10, 0),
+            durationMinutes: 60,
           ),
           TimeSession(
             id: '2',
@@ -59,14 +59,14 @@ void main() {
         ],
       );
 
-      expect(task.getTotalMinutes(), 210);
+      expect(task.getTotalMinutes(), 150);
     });
 
     test('should serialize to JSON correctly', () {
       final task = Task(
         id: '1',
         name: '学习Flutter',
-        targetMinutes: 600,
+        targetMinutes: 120,
         deadline: DateTime(2026, 3, 31),
         status: TaskStatus.active,
       );
@@ -75,7 +75,7 @@ void main() {
 
       expect(json['id'], '1');
       expect(json['name'], '学习Flutter');
-      expect(json['targetMinutes'], 600);
+      expect(json['targetMinutes'], 120);
       expect(json['status'], 0);
     });
 
@@ -83,7 +83,7 @@ void main() {
       final json = {
         'id': '1',
         'name': '学习Flutter',
-        'targetMinutes': 600,
+        'targetMinutes': 120,
         'deadline': '2026-03-31T00:00:00.000',
         'status': 0,
         'sessions': [],
@@ -93,7 +93,7 @@ void main() {
 
       expect(task.id, '1');
       expect(task.name, '学习Flutter');
-      expect(task.targetMinutes, 600);
+      expect(task.targetMinutes, 120);
       expect(task.status, TaskStatus.active);
     });
   });
