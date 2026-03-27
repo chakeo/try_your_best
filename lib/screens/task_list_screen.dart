@@ -29,6 +29,32 @@ class _TaskListScreenState extends State<TaskListScreen> {
     setState(() => _tasks = tasks);
   }
 
+  Future<void> _deleteTask(Task task) async {
+    final confirm = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('确认删除'),
+        content: Text('确定要删除任务"${task.name}"吗？'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: const Text('取消'),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(context, true),
+            child: const Text('删除'),
+          ),
+        ],
+      ),
+    );
+
+    if (confirm == true) {
+      _tasks.removeWhere((t) => t.id == task.id);
+      await _storage.saveTasks(_tasks);
+      setState(() {});
+    }
+  }
+
   Future<void> _addTask() async {
     final result = await showDialog<Map<String, dynamic>>(
       context: context,
@@ -125,6 +151,7 @@ class _TaskListScreenState extends State<TaskListScreen> {
                 );
                 _loadTasks();
               },
+              onDelete: () => _deleteTask(task),
             )),
       ],
     );

@@ -5,11 +5,13 @@ import '../models/task.dart';
 class TaskCard extends StatelessWidget {
   final Task task;
   final VoidCallback onTap;
+  final VoidCallback onDelete;
 
   const TaskCard({
     super.key,
     required this.task,
     required this.onTap,
+    required this.onDelete,
   });
 
   @override
@@ -36,7 +38,11 @@ class TaskCard extends StatelessWidget {
                       ),
                     ),
                   ),
-                  _buildStatusChip(),
+                  IconButton(
+                    icon: const Icon(Icons.delete, size: 20),
+                    onPressed: onDelete,
+                    color: Colors.red,
+                  ),
                 ],
               ),
               const SizedBox(height: 12),
