@@ -194,6 +194,14 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 8),
+            ReorderableListView.builder(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              itemCount: _task.subtasks.length,
+              onReorder: _reorderSubtasks,
+              itemBuilder: (context, index) => _buildSubtaskCard(_task.subtasks[index]),
+            ),
+            const SizedBox(height: 8),
             Row(
               children: [
                 Expanded(
@@ -207,14 +215,6 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
                   onPressed: _addSubtask,
                 ),
               ],
-            ),
-            const SizedBox(height: 8),
-            ReorderableListView.builder(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              itemCount: _task.subtasks.length,
-              onReorder: _reorderSubtasks,
-              itemBuilder: (context, index) => _buildSubtaskCard(_task.subtasks[index]),
             ),
           ],
         ),

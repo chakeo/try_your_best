@@ -108,6 +108,10 @@ class _AddTaskDialogState extends State<AddTaskDialog> {
         TextButton(
           onPressed: () {
             if (_taskController.text.trim().isNotEmpty) {
+              // 自动添加文本框中未提交的子任务
+              if (_subtaskController.text.trim().isNotEmpty) {
+                _subtaskNames.add(_subtaskController.text.trim());
+              }
               Navigator.pop(context, {
                 'name': _taskController.text.trim(),
                 'deadline': _deadline,

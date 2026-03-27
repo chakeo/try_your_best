@@ -82,7 +82,7 @@ class _TaskListScreenState extends State<TaskListScreen> {
 
       _tasks.add(task);
       await _storage.saveTasks(_tasks);
-      setState(() {});
+      await _loadTasks();
     }
   }
 
