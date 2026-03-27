@@ -8,62 +8,97 @@ class AddTaskDialog extends StatefulWidget {
 }
 
 class _AddTaskDialogState extends State<AddTaskDialog> {
-  final _controller = TextEditingController();
-  int _targetMinutes = 120;
+  final _taskController = TextEditingController();
+  final List<String> _subtaskNames = [];
+  final _subtaskController = TextEditingController();
   DateTime _deadline = DateTime.now().add(const Duration(days: 7));
 
   @override
   void dispose() {
-    _controller.dispose();
+    _taskController.dispose();
+    _subtaskController.dispose();
     super.dispose();
+  }
+
+  void _addSubtask() {
+    if (_subtaskController.text.trim().isNotEmpty) {
+      setState(() {
+        _subtaskNames.add(_subtaskController.text.trim());
+        _subtaskController.clear();
+      });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
       title: const Text('添加任务'),
-      content: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          TextField(
-            controller: _controller,
-            autofocus: true,
-            decoration: const InputDecoration(hintText: '输入任务名称'),
-          ),
-          const SizedBox(height: 16),
-          Row(
+      content: SizedBox(
+        width: double.maxFinite,
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
             children: [
-              const Text('目标时长：'),
-              const SizedBox(width: 8),
-              DropdownButton<int>(
-                value: _targetMinutes,
-                items: [30, 60, 90, 120, 150, 180, 240, 300, 360, 480, 600]
-                    .map((n) => DropdownMenuItem(value: n, child: Text('$n 分钟')))
-                    .toList(),
-                onChanged: (value) => setState(() => _targetMinutes = value!),
+              TextField(
+                controller: _taskController,
+                decoration: const InputDecoration(hintText: '大任务名称'),
+              ),
+              const SizedBox(height: 16),
+              Row(
+                children: [
+                  const Text('截止日期：'),
+                  TextButton(
+                    onPressed: () async {
+                      final date = await showDatePicker(
+                        context: context,
+                        initialDate: _deadline,
+                        firstDate: DateTime.now(),
+                        lastDate: DateTime.now().add(const Duration(days: 365)),
+                      );
+                      if (date != null) setState(() => _deadline = date);
+                    },
+                    child: Text('${_deadline.month}-${_deadline.day}'),
+                  ),
+                ],
+              ),
+              const Divider(),
+              const Text('小任务列表', style: TextStyle(fontWeight: FontWeight.bold)),
+              const SizedBox(height: 8),
+              if (_subtaskNames.isNotEmpty)
+                ConstrainedBox(
+                  constraints: const BoxConstraints(maxHeight: 200),
+                  child: ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: _subtaskNames.length,
+                    itemBuilder: (context, index) {
+                      final name = _subtaskNames[index];
+                      return ListTile(
+                        title: Text(name),
+                        trailing: IconButton(
+                          icon: const Icon(Icons.delete),
+                          onPressed: () => setState(() => _subtaskNames.removeAt(index)),
+                        ),
+                      );
+                    },
+                  ),
+                ),
+              Row(
+                children: [
+                  Expanded(
+                    child: TextField(
+                      controller: _subtaskController,
+                      decoration: const InputDecoration(hintText: '小任务名称'),
+                    ),
+                  ),
+                  IconButton(
+                    icon: const Icon(Icons.add),
+                    onPressed: _addSubtask,
+                  ),
+                ],
               ),
             ],
           ),
-          const SizedBox(height: 16),
-          Row(
-            children: [
-              const Text('截止日期：'),
-              const SizedBox(width: 8),
-              TextButton(
-                onPressed: () async {
-                  final date = await showDatePicker(
-                    context: context,
-                    initialDate: _deadline,
-                    firstDate: DateTime.now(),
-                    lastDate: DateTime.now().add(const Duration(days: 365)),
-                  );
-                  if (date != null) setState(() => _deadline = date);
-                },
-                child: Text('${_deadline.month}-${_deadline.day}'),
-              ),
-            ],
-          ),
-        ],
+        ),
       ),
       actions: [
         TextButton(
@@ -72,11 +107,11 @@ class _AddTaskDialogState extends State<AddTaskDialog> {
         ),
         TextButton(
           onPressed: () {
-            if (_controller.text.trim().isNotEmpty) {
+            if (_taskController.text.trim().isNotEmpty) {
               Navigator.pop(context, {
-                'name': _controller.text.trim(),
-                'targetMinutes': _targetMinutes,
+                'name': _taskController.text.trim(),
                 'deadline': _deadline,
+                'subtaskNames': _subtaskNames,
               });
             }
           },
@@ -86,4 +121,3 @@ class _AddTaskDialogState extends State<AddTaskDialog> {
     );
   }
 }
-

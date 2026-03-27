@@ -248,6 +248,7 @@ class _HabitListScreenState extends State<HabitListScreen> {
         ],
       ),
       floatingActionButton: FloatingActionButton(
+        heroTag: 'addHabit',
         onPressed: _addHabit,
         child: const Icon(Icons.add),
       ),

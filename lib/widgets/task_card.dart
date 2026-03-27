@@ -5,20 +5,16 @@ import '../models/task.dart';
 class TaskCard extends StatelessWidget {
   final Task task;
   final VoidCallback onTap;
-  final VoidCallback onStart;
 
   const TaskCard({
     super.key,
     required this.task,
     required this.onTap,
-    required this.onStart,
   });
 
   @override
   Widget build(BuildContext context) {
-    final progress = task.getProgress();
     final totalMinutes = task.getTotalMinutes();
-    final targetMinutes = task.targetMinutes;
 
     return Card(
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -44,38 +40,16 @@ class TaskCard extends StatelessWidget {
                 ],
               ),
               const SizedBox(height: 12),
-              LinearProgressIndicator(
-                value: progress > 1.0 ? 1.0 : progress,
-                backgroundColor: Colors.grey[200],
-              ),
-              const SizedBox(height: 8),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    '$totalMinutes / $targetMinutes 分钟',
+                    '已消耗: $totalMinutes 分钟',
                     style: TextStyle(color: Colors.grey[600]),
                   ),
                   Text(
-                    '${(progress * 100).toStringAsFixed(0)}%',
-                    style: TextStyle(
-                      color: Colors.grey[600],
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 8),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
                     '截止: ${DateFormat('MM-dd').format(task.deadline)}',
                     style: TextStyle(color: Colors.grey[600], fontSize: 12),
-                  ),
-                  ElevatedButton(
-                    onPressed: task.status == TaskStatus.active ? onStart : null,
-                    child: const Text('开始'),
                   ),
                 ],
               ),
@@ -91,17 +65,17 @@ class TaskCard extends StatelessWidget {
     Color color;
 
     switch (task.status) {
-      case TaskStatus.active:
+      case TaskStatus.notStarted:
+        label = '未开始';
+        color = Colors.grey;
+        break;
+      case TaskStatus.inProgress:
         label = '进行中';
         color = Colors.blue;
         break;
       case TaskStatus.completed:
         label = '已完成';
         color = Colors.green;
-        break;
-      case TaskStatus.abandoned:
-        label = '已放弃';
-        color = Colors.grey;
         break;
     }
 
@@ -112,4 +86,3 @@ class TaskCard extends StatelessWidget {
     );
   }
 }
-

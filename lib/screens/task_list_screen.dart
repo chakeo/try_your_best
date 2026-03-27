@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import '../models/task.dart';
+import '../models/subtask.dart';
 import '../services/task_storage_service.dart';
 import '../widgets/add_task_dialog.dart';
 import '../widgets/task_card.dart';
-import '../widgets/time_distribution_chart.dart';
 import 'task_detail_screen.dart';
 
 class TaskListScreen extends StatefulWidget {
@@ -35,11 +35,22 @@ class _TaskListScreenState extends State<TaskListScreen> {
     );
 
     if (result != null) {
+      final taskId = DateTime.now().millisecondsSinceEpoch.toString();
+      final subtasks = (result['subtaskNames'] as List<String>)
+          .asMap()
+          .entries
+          .map((entry) => Subtask(
+                id: '$taskId-${entry.key}',
+                name: entry.value,
+                parentTaskId: taskId,
+              ))
+          .toList();
+
       final task = Task(
-        id: DateTime.now().millisecondsSinceEpoch.toString(),
+        id: taskId,
         name: result['name'],
-        targetMinutes: result['targetMinutes'],
         deadline: result['deadline'],
+        subtasks: subtasks,
       );
 
       _tasks.add(task);
@@ -54,46 +65,29 @@ class _TaskListScreenState extends State<TaskListScreen> {
       appBar: AppBar(title: const Text('任务管理')),
       body: _tasks.isEmpty
           ? const Center(child: Text('暂无任务，点击右下角添加'))
-          : Column(
-              children: [
-                TimeDistributionChart(tasks: _tasks),
-                Expanded(
-                  child: ListView.builder(
-                    itemCount: _tasks.length,
-                    itemBuilder: (context, index) {
-                      final task = _tasks[index];
-                      return TaskCard(
-                        task: task,
-                        onTap: () async {
-                          await Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (_) => TaskDetailScreen(task: task),
-                            ),
-                          );
-                          _loadTasks();
-                        },
-                        onStart: () async {
-                          await Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (_) => TaskDetailScreen(task: task),
-                            ),
-                          );
-                          _loadTasks();
-                        },
-                      );
-                    },
-                  ),
-                ),
-              ],
+          : ListView.builder(
+              itemCount: _tasks.length,
+              itemBuilder: (context, index) {
+                final task = _tasks[index];
+                return TaskCard(
+                  task: task,
+                  onTap: () async {
+                    await Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => TaskDetailScreen(task: task),
+                      ),
+                    );
+                    _loadTasks();
+                  },
+                );
+              },
             ),
       floatingActionButton: FloatingActionButton(
+        heroTag: 'addTask',
         onPressed: _addTask,
         child: const Icon(Icons.add),
       ),
     );
   }
 }
-
-

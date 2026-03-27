@@ -1,46 +1,38 @@
-import 'time_session.dart';
+import 'subtask.dart';
 
 enum TaskStatus {
-  active,
+  notStarted,
+  inProgress,
   completed,
-  abandoned,
 }
 
 class Task {
   final String id;
   final String name;
-  final int targetMinutes;
   final DateTime deadline;
   final TaskStatus status;
-  final List<TimeSession> sessions;
+  final List<Subtask> subtasks;
 
   Task({
     required this.id,
     required this.name,
-    required this.targetMinutes,
     required this.deadline,
-    this.status = TaskStatus.active,
-    List<TimeSession>? sessions,
-  }) : sessions = sessions ?? [];
-
-  double getProgress() {
-    int totalMinutes = getTotalMinutes();
-    return totalMinutes / targetMinutes;
-  }
+    this.status = TaskStatus.notStarted,
+    List<Subtask>? subtasks,
+  }) : subtasks = subtasks ?? [];
 
   int getTotalMinutes() {
-    return sessions.fold(0, (sum, s) => sum + s.durationMinutes);
+    return subtasks.fold(0, (sum, st) => sum + st.getTotalMinutes());
   }
 
   factory Task.fromJson(Map<String, dynamic> json) {
     return Task(
       id: json['id'],
       name: json['name'],
-      targetMinutes: json['targetMinutes'],
       deadline: DateTime.parse(json['deadline']),
       status: TaskStatus.values[json['status']],
-      sessions: (json['sessions'] as List)
-          .map((s) => TimeSession.fromJson(s))
+      subtasks: (json['subtasks'] as List)
+          .map((s) => Subtask.fromJson(s))
           .toList(),
     );
   }
@@ -49,28 +41,25 @@ class Task {
     return {
       'id': id,
       'name': name,
-      'targetMinutes': targetMinutes,
       'deadline': deadline.toIso8601String(),
       'status': status.index,
-      'sessions': sessions.map((s) => s.toJson()).toList(),
+      'subtasks': subtasks.map((s) => s.toJson()).toList(),
     };
   }
 
   Task copyWith({
     String? id,
     String? name,
-    int? targetMinutes,
     DateTime? deadline,
     TaskStatus? status,
-    List<TimeSession>? sessions,
+    List<Subtask>? subtasks,
   }) {
     return Task(
       id: id ?? this.id,
       name: name ?? this.name,
-      targetMinutes: targetMinutes ?? this.targetMinutes,
       deadline: deadline ?? this.deadline,
       status: status ?? this.status,
-      sessions: sessions ?? this.sessions,
+      subtasks: subtasks ?? this.subtasks,
     );
   }
 }
