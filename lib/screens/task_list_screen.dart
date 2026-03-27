@@ -16,6 +16,7 @@ class TaskListScreen extends StatefulWidget {
 class _TaskListScreenState extends State<TaskListScreen> {
   final _storage = TaskStorageService();
   List<Task> _tasks = [];
+  bool _showCompleted = false;
 
   @override
   void initState() {
@@ -61,33 +62,71 @@ class _TaskListScreenState extends State<TaskListScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final inProgress = _tasks.where((t) => t.status == TaskStatus.inProgress).toList();
+    final notStarted = _tasks.where((t) => t.status == TaskStatus.notStarted).toList();
+    final completed = _tasks.where((t) => t.status == TaskStatus.completed).toList();
+
     return Scaffold(
-      appBar: AppBar(title: const Text('任务管理')),
+      appBar: AppBar(
+        title: const Text('任务管理'),
+        actions: [
+          TextButton.icon(
+            onPressed: () => setState(() => _showCompleted = !_showCompleted),
+            icon: Icon(_showCompleted ? Icons.visibility_off : Icons.visibility),
+            label: Text(_showCompleted ? '隐藏已完成' : '显示已完成'),
+            style: TextButton.styleFrom(foregroundColor: Colors.white),
+          ),
+        ],
+      ),
       body: _tasks.isEmpty
           ? const Center(child: Text('暂无任务，点击右下角添加'))
-          : ListView.builder(
-              itemCount: _tasks.length,
-              itemBuilder: (context, index) {
-                final task = _tasks[index];
-                return TaskCard(
-                  task: task,
-                  onTap: () async {
-                    await Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) => TaskDetailScreen(task: task),
-                      ),
-                    );
-                    _loadTasks();
-                  },
-                );
-              },
+          : ListView(
+              children: [
+                if (inProgress.isNotEmpty) _buildSection('进行中', inProgress, Colors.blue),
+                if (notStarted.isNotEmpty) _buildSection('未开始', notStarted, Colors.grey),
+                if (_showCompleted && completed.isNotEmpty) _buildSection('已完成', completed, Colors.green),
+              ],
             ),
       floatingActionButton: FloatingActionButton(
         heroTag: 'addTask',
         onPressed: _addTask,
         child: const Icon(Icons.add),
       ),
+    );
+  }
+
+  Widget _buildSection(String title, List<Task> tasks, Color color) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
+          child: Row(
+            children: [
+              Container(
+                width: 4,
+                height: 20,
+                color: color,
+                margin: const EdgeInsets.only(right: 8),
+              ),
+              Text(
+                '$title (${tasks.length})',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: color),
+              ),
+            ],
+          ),
+        ),
+        ...tasks.map((task) => TaskCard(
+              task: task,
+              onTap: () async {
+                await Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => TaskDetailScreen(task: task)),
+                );
+                _loadTasks();
+              },
+            )),
+      ],
     );
   }
 }

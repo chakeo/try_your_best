@@ -45,8 +45,8 @@ class _MainScreenState extends State<MainScreen> {
       body: IndexedStack(
         index: _currentIndex,
         children: const [
-          HabitListScreen(),
           TaskListScreen(),
+          HabitListScreen(),
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
@@ -54,12 +54,12 @@ class _MainScreenState extends State<MainScreen> {
         onTap: (index) => setState(() => _currentIndex = index),
         items: const [
           BottomNavigationBarItem(
-            icon: Icon(Icons.check_circle),
-            label: '习惯',
-          ),
-          BottomNavigationBarItem(
             icon: Icon(Icons.timer),
             label: '任务',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.check_circle),
+            label: '习惯',
           ),
         ],
       ),

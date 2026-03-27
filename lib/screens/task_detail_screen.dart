@@ -39,6 +39,37 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
       final endTime = DateTime.now();
       final duration = endTime.difference(_startTime!).inMinutes;
 
+      // 如果未达到30分钟，弹出确认对话框
+      if (duration < 30) {
+        final shouldDiscard = await showDialog<bool>(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: const Text('提示'),
+            content: Text('计时未达到30分钟（当前 $duration 分钟），确定停止吗？停止后将不保留此次记录。'),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context, false),
+                child: const Text('取消'),
+              ),
+              TextButton(
+                onPressed: () => Navigator.pop(context, true),
+                child: const Text('确定停止'),
+              ),
+            ],
+          ),
+        );
+
+        if (shouldDiscard != true) return;
+
+        // 确认停止，不保存记录，直接重置状态
+        setState(() {
+          _activeSubtaskId = null;
+          _startTime = null;
+        });
+        return;
+      }
+
+      // 达到30分钟，正常保存记录
       final session = TimeSession(
         id: DateTime.now().millisecondsSinceEpoch.toString(),
         startTime: _startTime!,
@@ -178,13 +209,12 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
               ],
             ),
             const SizedBox(height: 8),
-            ReorderableListView(
+            ReorderableListView.builder(
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
+              itemCount: _task.subtasks.length,
               onReorder: _reorderSubtasks,
-              children: _task.subtasks
-                  .map((subtask) => _buildSubtaskCard(subtask))
-                  .toList(),
+              itemBuilder: (context, index) => _buildSubtaskCard(_task.subtasks[index]),
             ),
           ],
         ),
