@@ -22,7 +22,6 @@ void main() {
         Task(
           id: '1',
           name: '学习Flutter',
-          targetMinutes: 600,
           deadline: DateTime(2026, 3, 31),
         ),
       ];

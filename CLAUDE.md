@@ -45,3 +45,17 @@ flutter analyze
 **Shared**:
 - `lib/main.dart` - App entry and bottom navigation
 - `lib/widgets/header_widget.dart`
+
+## Test Coverage
+
+All models, services, and key widgets have test coverage:
+- Models: `habit`, `task`, `subtask`, `time_session`
+- Services: `storage_service`, `task_storage_service`
+- Widgets: `add_habit_dialog`, `add_task_dialog`, `task_card`, `header_widget`
+- Screens: `habit_detail_screen`, `task_list_screen`, `task_detail_screen`
+
+## Code Quality
+
+- Error handling in storage services for data corruption
+- No analyzer warnings or errors
+- Consistent code style across modules

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import '../models/task.dart';
 
 class TaskCard extends StatelessWidget {
@@ -117,31 +116,5 @@ class TaskCard extends StatelessWidget {
     if (progress >= 0.8) return Colors.green;
     if (progress >= 0.5) return Colors.blue;
     return Colors.orange;
-  }
-
-  Widget _buildStatusChip() {
-    String label;
-    Color color;
-
-    switch (task.status) {
-      case TaskStatus.notStarted:
-        label = '未开始';
-        color = Colors.grey;
-        break;
-      case TaskStatus.inProgress:
-        label = '进行中';
-        color = Colors.blue;
-        break;
-      case TaskStatus.completed:
-        label = '已完成';
-        color = Colors.green;
-        break;
-    }
-
-    return Chip(
-      label: Text(label, style: const TextStyle(fontSize: 12)),
-      backgroundColor: color.withValues(alpha: 0.2),
-      labelStyle: TextStyle(color: color),
-    );
   }
 }

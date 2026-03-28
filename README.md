@@ -1,17 +1,27 @@
 # 习惯打卡 (Try Your Best)
 
-一个简洁优雅的 Flutter 习惯追踪应用，帮助你养成好习惯，记录每日打卡进度。
+一个简洁优雅的 Flutter 应用，包含习惯追踪和任务管理两大模块。
 
 ## ✨ 功能特性
 
+**习惯打卡模块**
 - 📝 创建自定义习惯，设置每日目标次数和目标天数
 - ✅ 每日多次打卡支持（可设置 1-10 次/天）
 - 🔥 连续打卡天数统计（Streak）
 - 📊 打卡历史日历视图
 - 📈 打卡统计数据展示
+- 🔄 习惯列表拖拽排序
+
+**任务管理模块**
+- 📋 任务创建与管理
+- ⏱️ 时间会话追踪
+- 📝 子任务支持
+- 📅 截止日期提醒
+- 📊 进度可视化
+
+**通用特性**
 - 🎨 优雅的 UI 设计和流畅动画
 - 💾 本地数据持久化存储
-- 🔄 习惯列表拖拽排序
 
 ## 📱 截图
 
@@ -54,25 +64,37 @@ flutter run
 ```
 lib/
 ├── models/
-│   └── habit.dart              # 习惯数据模型
+│   ├── habit.dart              # 习惯数据模型
+│   ├── task.dart               # 任务数据模型
+│   ├── subtask.dart            # 子任务模型
+│   └── time_session.dart       # 时间会话模型
 ├── services/
-│   └── storage_service.dart    # 数据存储服务
+│   ├── storage_service.dart    # 习惯存储服务
+│   └── task_storage_service.dart # 任务存储服务
 ├── screens/
-│   └── habit_detail_screen.dart # 习惯详情页
+│   ├── habit_detail_screen.dart # 习惯详情页
+│   ├── task_list_screen.dart   # 任务列表页
+│   └── task_detail_screen.dart # 任务详情页
 ├── widgets/
 │   ├── add_habit_dialog.dart   # 添加习惯对话框
+│   ├── add_task_dialog.dart    # 添加任务对话框
+│   ├── task_card.dart          # 任务卡片组件
 │   └── header_widget.dart      # 头部组件
 └── main.dart                   # 应用入口
 
 test/
 ├── models/
-│   ├── habit_test.dart         # 模型单元测试
-│   └── habit_target_days_test.dart
+│   ├── habit_test.dart         # 习惯模型测试
+│   ├── task_test.dart          # 任务模型测试
+│   ├── subtask_test.dart       # 子任务模型测试
+│   └── time_session_test.dart  # 时间会话模型测试
 ├── services/
-│   └── storage_service_test.dart # 服务单元测试
+│   ├── storage_service_test.dart # 习惯存储测试
+│   └── task_storage_service_test.dart # 任务存储测试
 └── widgets/
-    ├── add_habit_dialog_test.dart # 组件测试
-    └── header_widget_test.dart
+    ├── add_habit_dialog_test.dart # 习惯对话框测试
+    ├── task_card_test.dart     # 任务卡片测试
+    └── header_widget_test.dart # 头部组件测试
 ```
 
 ## 🧪 测试
@@ -86,6 +108,11 @@ flutter test
 ```bash
 flutter test test/models/habit_test.dart
 ```
+
+测试覆盖：
+- 所有模型类（Habit, Task, Subtask, TimeSession）
+- 所有服务类（StorageService, TaskStorageService）
+- 主要组件和屏幕
 
 ## 📝 开发命令
 

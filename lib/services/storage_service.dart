@@ -10,8 +10,13 @@ class StorageService {
     final String? data = prefs.getString(_key);
     if (data == null) return [];
 
-    final List<dynamic> jsonList = json.decode(data);
-    return jsonList.map((json) => Habit.fromJson(json)).toList();
+    try {
+      final List<dynamic> jsonList = json.decode(data);
+      return jsonList.map((json) => Habit.fromJson(json)).toList();
+    } catch (e) {
+      await prefs.remove(_key);
+      return [];
+    }
   }
 
   Future<void> saveHabits(List<Habit> habits) async {
