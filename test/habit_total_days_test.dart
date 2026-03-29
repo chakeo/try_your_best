@@ -8,10 +8,14 @@ void main() {
       await tester.pumpWidget(const MyApp());
       await tester.pumpAndSettle();
 
+      // Switch to habit tab
+      await tester.tap(find.text('习惯'));
+      await tester.pumpAndSettle();
+
       await tester.tap(find.byIcon(Icons.add));
       await tester.pumpAndSettle();
 
-      await tester.enterText(find.byType(TextField), '测试习惯');
+      await tester.enterText(find.byType(TextField).last, '测试习惯');
       await tester.tap(find.text('确认'));
       await tester.pumpAndSettle();
 
@@ -19,7 +23,7 @@ void main() {
       expect(find.textContaining('目标 21 天'), findsOneWidget);
 
       // 打卡一次
-      await tester.tap(find.byIcon(Icons.circle_outlined));
+      await tester.tap(find.byIcon(Icons.circle_outlined).first);
       await tester.pumpAndSettle();
 
       // 验证仍显示目标天数21

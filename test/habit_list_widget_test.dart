@@ -8,28 +8,38 @@ void main() {
       await tester.pumpWidget(const MyApp());
       await tester.pumpAndSettle();
 
+      // Switch to habit tab
+      await tester.tap(find.text('习惯'));
+      await tester.pumpAndSettle();
+
       await tester.tap(find.byIcon(Icons.add));
       await tester.pumpAndSettle();
 
-      await tester.enterText(find.byType(TextField), '测试习惯');
+      await tester.enterText(find.byType(TextField).last, '测试习惯');
       await tester.tap(find.text('确认'));
       await tester.pumpAndSettle();
 
       await tester.tap(find.byIcon(Icons.circle_outlined));
       await tester.pumpAndSettle();
 
-      expect(find.byIcon(Icons.check_circle), findsOneWidget);
-      expect(find.byIcon(Icons.circle_outlined), findsNothing);
+      // Find icons within the card, excluding navigation bar
+      final card = find.byType(Card);
+      expect(find.descendant(of: card, matching: find.byIcon(Icons.check_circle)), findsOneWidget);
+      expect(find.descendant(of: card, matching: find.byIcon(Icons.circle_outlined)), findsNothing);
     });
 
     testWidgets('显示多个打卡圆圈当dailyGoal为3且打卡2次', (WidgetTester tester) async {
       await tester.pumpWidget(const MyApp());
       await tester.pumpAndSettle();
 
+      // Switch to habit tab
+      await tester.tap(find.text('习惯'));
+      await tester.pumpAndSettle();
+
       await tester.tap(find.byIcon(Icons.add));
       await tester.pumpAndSettle();
 
-      await tester.enterText(find.byType(TextField), '测试习惯');
+      await tester.enterText(find.byType(TextField).last, '测试习惯');
       await tester.tap(find.byType(DropdownButton<int>).first);
       await tester.pumpAndSettle();
       await tester.tap(find.text('3 次').last);
@@ -42,18 +52,24 @@ void main() {
       await tester.tap(find.byIcon(Icons.circle_outlined).first);
       await tester.pumpAndSettle();
 
-      expect(find.byIcon(Icons.check_circle), findsNWidgets(2));
-      expect(find.byIcon(Icons.circle_outlined), findsOneWidget);
+      // Find icons within the card, excluding navigation bar
+      final card = find.byType(Card);
+      expect(find.descendant(of: card, matching: find.byIcon(Icons.check_circle)), findsNWidgets(2));
+      expect(find.descendant(of: card, matching: find.byIcon(Icons.circle_outlined)), findsOneWidget);
     });
 
     testWidgets('显示所有圆圈已打卡当达到dailyGoal', (WidgetTester tester) async {
       await tester.pumpWidget(const MyApp());
       await tester.pumpAndSettle();
 
+      // Switch to habit tab
+      await tester.tap(find.text('习惯'));
+      await tester.pumpAndSettle();
+
       await tester.tap(find.byIcon(Icons.add));
       await tester.pumpAndSettle();
 
-      await tester.enterText(find.byType(TextField), '测试习惯');
+      await tester.enterText(find.byType(TextField).last, '测试习惯');
       await tester.tap(find.byType(DropdownButton<int>).first);
       await tester.pumpAndSettle();
       await tester.tap(find.text('2 次').last);
@@ -66,8 +82,10 @@ void main() {
       await tester.tap(find.byIcon(Icons.circle_outlined).first);
       await tester.pumpAndSettle();
 
-      expect(find.byIcon(Icons.check_circle), findsNWidgets(2));
-      expect(find.byIcon(Icons.circle_outlined), findsNothing);
+      // Find icons within the card, excluding navigation bar
+      final card = find.byType(Card);
+      expect(find.descendant(of: card, matching: find.byIcon(Icons.check_circle)), findsNWidgets(2));
+      expect(find.descendant(of: card, matching: find.byIcon(Icons.circle_outlined)), findsNothing);
     });
   });
 }

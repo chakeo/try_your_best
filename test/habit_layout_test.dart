@@ -8,19 +8,24 @@ void main() {
       await tester.pumpWidget(const MyApp());
       await tester.pumpAndSettle();
 
+      // Switch to habit tab
+      await tester.tap(find.text('习惯'));
+      await tester.pumpAndSettle();
+
       // 添加习惯
       await tester.tap(find.byIcon(Icons.add));
       await tester.pumpAndSettle();
 
-      await tester.enterText(find.byType(TextField), '测试习惯');
+      await tester.enterText(find.byType(TextField).last, '测试习惯');
       await tester.tap(find.text('确认'));
       await tester.pumpAndSettle();
 
       // 验证有拖动图标
       expect(find.byIcon(Icons.drag_handle), findsOneWidget);
 
-      // 验证有打卡圆圈
-      expect(find.byIcon(Icons.circle_outlined), findsOneWidget);
+      // 验证有打卡圆圈 (within card, excluding navigation)
+      final card = find.byType(Card);
+      expect(find.descendant(of: card, matching: find.byIcon(Icons.circle_outlined)), findsOneWidget);
 
       // 验证有习惯名称
       expect(find.text('测试习惯'), findsOneWidget);

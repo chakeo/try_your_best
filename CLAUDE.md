@@ -32,9 +32,8 @@ flutter analyze
 **Habit Module** (see `.claude/habit.md` for details):
 - `lib/models/habit.dart`
 - `lib/services/storage_service.dart`
-- `lib/screens/habit_detail_screen.dart`
-- `lib/widgets/add_habit_dialog.dart`
-- `HabitListScreen` in `lib/main.dart`
+- `lib/screens/habit_list_screen.dart`, `habit_detail_screen.dart`
+- `lib/widgets/add_habit_dialog.dart`, `habit_card.dart`
 
 **Task Module** (see `.claude/task.md` for details):
 - `lib/models/task.dart`, `subtask.dart`, `time_session.dart`
@@ -51,11 +50,12 @@ flutter analyze
 All models, services, and key widgets have test coverage:
 - Models: `habit`, `task`, `subtask`, `time_session`
 - Services: `storage_service`, `task_storage_service`
-- Widgets: `add_habit_dialog`, `add_task_dialog`, `task_card`, `header_widget`
-- Screens: `habit_detail_screen`, `task_list_screen`, `task_detail_screen`
+- Widgets: `add_habit_dialog`, `add_task_dialog`, `task_card`, `habit_card`, `header_widget`
+- Screens: `habit_list_screen`, `habit_detail_screen`, `task_list_screen`, `task_detail_screen`, `main_screen`
 
 ## Code Quality
 
 - Error handling in storage services for data corruption
 - No analyzer warnings or errors
 - Consistent code style across modules
+- Extracted components for better maintainability (HabitCard, HabitListScreen)

@@ -7,10 +7,14 @@ void main() {
     await tester.pumpWidget(const MyApp());
     await tester.pumpAndSettle();
 
+    // Switch to habit tab
+    await tester.tap(find.text('习惯'));
+    await tester.pumpAndSettle();
+
     await tester.tap(find.byIcon(Icons.add));
     await tester.pumpAndSettle();
 
-    await tester.enterText(find.byType(TextField), '测试习惯');
+    await tester.enterText(find.byType(TextField).last, '测试习惯');
     await tester.tap(find.text('确认'));
     await tester.pumpAndSettle();
 
